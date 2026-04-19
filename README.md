@@ -19,7 +19,7 @@ Python 3.x
 
 *How to Run*
 
-bashgit clone https://github.com/yourusername/trackstudy.git
+git clone https://github.com/yourusername/trackstudy.git
 cd trackstudy
 python trackstudy.py
 
