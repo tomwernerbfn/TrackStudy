@@ -5,7 +5,7 @@ def save():
     t = ''
     d = ''
     no = ''
-    date = datetime.date.today()
+    time = datetime.datetime.now()
     
     while True:
         print('save study'.upper())
@@ -17,23 +17,8 @@ def save():
         
         if n != '' and t != '' and d != '' and no != '':
             with open('logs.txt', 'a') as f:
-                f.write(f'{date} {n} {t} {d} {no}\n')
+                f.write(f'{time} {n} {t} {d} {no}\n')
                 print('New study successfully saved for today!')
-                if d < 30:
-                    print("That study wasn't that long! (1/5 Stars)")
-                    continue
-                elif d > 30 and d < 60:
-                    print("Not bad! (2/5 Stars)")
-                    continue
-                elif d > 60 and d < 120:
-                    print("Very Good! (3/5 Stars)")
-                    continue
-                elif d > 120 and d < 180:
-                    print("Impressive! (4/5 Stars)")
-                    continue
-                elif d > 180:
-                    print("WOW! (5/5 Stars)")
-                    continue
                 menu()
                 break
         else:
@@ -154,7 +139,7 @@ def progression():
         parts = [line.split() for line in lines if line.strip()]
         dates = {datetime.date.fromisoformat(line[0]): line for line in parts}
 
-        total_mins = sum(float(line[3]) for line in parts)
+        total_mins = sum(float(line[4]) for line in parts)
         hour = round(total_mins / 60, 2)
 
         while check in dates:
@@ -174,8 +159,19 @@ def progression():
                 print("Your input wasn't an option to choose from!")
                 continue
 def menu():
+    with open('logs.txt', 'r') as r:
+        lines = r.readlines()
+        parts = [line.split() for line in lines if line.strip()]
+        dates = {datetime.date.fromisoformat(line[0]): line for line in parts}
+        today = datetime.date.today()
+        if today in dates:
+            x = parts[0][2]
+        else:
+            x = 'There are no studies from today!'
+
     while True:
         print('Welcome to TrackStudy!')
+        print(f"Today's studies: {x}")
         print('1. Save Study')
         print('2. Load/Delete Study')
         print('3. Progression')
