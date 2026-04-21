@@ -23,10 +23,10 @@ git clone https://github.com/tomwernerbfn/TrackStudy.git
 cd trackstudy
 python trackstudy.py
 
-# Known Issues
+# Updates
 
-- Streak resets if you skip any single day, including weekends
-- Adding new fields may affect how older entries are read
+- Timestamps officially added
+- Adding new fields may affect how older entries are read..
 *Currently working on it*
 
 # About
