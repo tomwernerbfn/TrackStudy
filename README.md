@@ -26,8 +26,8 @@ python trackstudy.py
 # Updates
 
 - Timestamps officially added
-- Adding new fields may affect how older entries are read..
-*Currently working on it*
+- Setting a goal for the duration of today's study
+*Currently working on smoothness and performance issues*
 
 # About
 This is my second project coded with python and I am proud of it. Not because it's the best code I've ever seen, but because this code came from me, an beginner developer. Thank you for your time reading this and maybe even trying the code, it means much to me. Feel free to open an issue or fork the project!
