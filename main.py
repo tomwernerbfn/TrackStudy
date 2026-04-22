@@ -73,7 +73,8 @@ def loadDelete():
         print('load / delete studies'.upper())
         print('1. Load study')
         print('2. Delete study')
-        print('3. Cancel')
+        print('3. Load all')
+        print('4. Cancel')
 
         with open('logs.txt', 'r+') as rf:
             try:
@@ -122,6 +123,11 @@ def loadDelete():
                             print("Couldn't find the study! Please try again.")
                             continue
                 elif config == 3:
+                    for lines in rf:
+                        print(lines)
+                    menu()
+                    break
+                elif config == 4:
                     print('Canceled configuration.')
                     menu()
                     break
@@ -134,7 +140,7 @@ def progression():
     streak = 0
     check = datetime.date.today()
 
-    with open('logs.txt', 'r+') as r: #VERY IMPORTANT
+    with open('logs.txt', 'r') as r:
         lines = r.readlines()
         parts = [line.split() for line in lines if line.strip()]
         dates = {datetime.date.fromisoformat(line[0]): line for line in parts}
@@ -146,18 +152,73 @@ def progression():
             streak += 1
             check -= datetime.timedelta(days=1)
 
-        while True:
-            print('progression'.upper())
-            print(f'Total hours studied: {hour}')
-            print(f'Current streak: {streak}')
+    # Load today's goal from config.txt
+    goal = 'None'
+    try:
+        with open('config.txt', 'r') as o:
+            config_lines = o.readlines()
+            for line in config_lines:
+                parts = line.split()
+                if parts and datetime.date.fromisoformat(parts[0]) == check:
+                    goal = parts[1]
+                    break
+    except FileNotFoundError:
+        pass
 
-            leave = input('Go back? (y) ')
-            if leave == 'y':
-                menu()
-                break
-            else:
-                print("Your input wasn't an option to choose from!")
+    while True:
+        print('progression'.upper())
+        print(f'Total hours studied: {hour}')
+        print(f'Current streak: {streak}')
+        print(f"Today's study goal: {goal} mins")
+        print('1. Set a new goal')
+        print('2. Go back')
+
+        try:
+            choice = int(input('Choose an option: '))
+        except Exception:
+            print('Please enter a number!')
+            continue
+
+        if choice == 1:
+            try:
+                gl = float(input('Choose a study goal for today: '))
+            except Exception:
+                print('Please enter a number in minutes!')
                 continue
+            else:
+                if goal == gl:
+                    print('Your input is already the goal for today!')
+                    continue
+                
+                overwrite = input('Overwrite old goal? (y/n) ')
+                if overwrite == 'y':
+                    try:
+                        with open('config.txt', 'r') as o:
+                            config_lines = o.readlines()
+                        filtered = [l for l in config_lines if str(check) not in l]
+                    except FileNotFoundError:
+                        filtered = []
+
+                    with open('config.txt', 'w') as o:
+                        o.writelines(filtered)
+                        o.write(f'{check} {gl}\n')
+
+                    goal = gl
+                    print('New goal set!')
+                elif overwrite == 'n':
+                    print('Overwrite successfully canceled.')
+                    menu()
+                    break
+                else:
+                    print("Your input wasn't an option to choose from!")
+                    continue
+
+        elif choice == 2:
+            menu()
+            break
+        else:
+            print("Your input wasn't an option to choose from!")
+
 def menu():
     with open('logs.txt', 'r') as r:
         lines = r.readlines()
